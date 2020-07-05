@@ -7,7 +7,7 @@ import { AudioService } from './audio.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-
+    
     @ViewChild("documentSection")
     private documentSection: ElementRef;
     private progressBarWidth: number;

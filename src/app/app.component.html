@@ -10,7 +10,7 @@
   <body>
     <div class="wrapper">
       <div class="player">
-        <div class="player-cover" style="background-image: url({{audioService.currentSong.albumCoverURL}});"></div>
+        <div class="player-cover" style="background-image: url({{audioService.currentSong.albumCoverURL}});" (click)="audioService.toggleAudio()"></div>
         <div class="album-info">
           <div class="album-info_track">{{audioService.currentSong.songName}}</div>
           <div class="album-info_name">{{audioService.currentSong.artistName+" : "+audioService.currentSong.albumName}}</div>
@@ -27,6 +27,9 @@
           </div>
         </div>
         <div class="player-control-bar">
+          <div class="player-control-item" (click)="audioService.shuffleList()">
+            <i class="material-icons" style="font-size: 40px">shuffle</i>
+          </div>
           <div class="player-control-item" (click)="audioService.playPrev()">
             <i class="material-icons" style="font-size: 50px">fast_rewind</i>
           </div>

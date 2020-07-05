@@ -11,6 +11,7 @@ export class AudioService {
 
     public audio: HTMLAudioElement;
     public currentSong: songInfo;
+    public songsOrder: Array<number>;
     public idx: number;
     public timeElapsed: BehaviorSubject<string> = new BehaviorSubject('00:00');
     public timeRemaining: BehaviorSubject<string> = new BehaviorSubject('-00:00');
@@ -19,8 +20,12 @@ export class AudioService {
     public playerStatus: BehaviorSubject<string> = new BehaviorSubject('paused');
 
     constructor() { 
-        this.idx = 0; 
-        this.currentSong= songs[this.idx];
+        this.idx = 0;
+        this.songsOrder=[];
+        for(let i=0;i<songs.length;i++){
+            var temp = this.songsOrder.push(i);
+        } 
+        this.currentSong= songs[this.songsOrder[this.idx]];
         this.audio = new Audio(songs[this.idx].songURL);
         this.attachListeners();        
     }
@@ -67,6 +72,7 @@ export class AudioService {
                 break;
             case 'ended':
                 this.playerStatus.next('ended');
+                this.playNext();
                 break;
             default:
                 this.playerStatus.next('paused');
@@ -87,16 +93,27 @@ export class AudioService {
         this.audio.play();
     }
 
+    public shuffleList(): void {
+        for(let i=this.songsOrder.length-1;i>0;i--){
+            let j=Math.floor(Math.random() * (i+1));
+            let temp = this.songsOrder[i];
+            this.songsOrder[i]=this.songsOrder[j];
+            this.songsOrder[j]=temp;
+        }
+        this.idx=-1;
+        this.playNext();
+    }
+
     public playNext(): void {
         this.idx = (this.idx+1)%songs.length;
-        this.currentSong= songs[this.idx];
-        this.setAudio(songs[this.idx].songURL);
+        this.currentSong= songs[this.songsOrder[this.idx]];
+        this.setAudio(songs[this.songsOrder[this.idx]].songURL);
     }
 
     public playPrev(): void {
         this.idx = (this.idx-1+songs.length)%songs.length;
-        this.currentSong= songs[this.idx];
-        this.setAudio(songs[this.idx].songURL);
+        this.currentSong= songs[this.songsOrder[this.idx]];
+        this.setAudio(songs[this.songsOrder[this.idx]].songURL);
     }
 
     public pauseAudio(): void {
