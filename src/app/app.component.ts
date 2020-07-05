@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
+import { AudioService } from './audio.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,27 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'mini-music-player';
+
+    @ViewChild("documentSection")
+    private documentSection: ElementRef;
+    private progressBarWidth: number;
+    public ngAfterViewInit(): void {
+        this.progressBarWidth = this.documentSection.nativeElement.offsetWidth;
+    }
+
+    constructor(public audioService : AudioService) {}
+
+    
+
+    setBarWidth() {
+      let style = {
+        'width' : this.audioService.getPercentElapsed()+'%'
+      }
+      return style;
+    }
+
+    seekSong(event:any){
+      let updateWidth = Math.floor((event.offsetX/this.progressBarWidth)*this.audioService.audio.duration);
+      this.audioService.seekAudio(updateWidth);
+    }
 }

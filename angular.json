@@ -119,6 +119,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "mini-music-player"
+    }
+  },
+  "defaultProject": "mini-music-player",
+  "cli": {
+    "analytics": "f3c96d58-0315-42f9-8755-33e1072326d4"
+  }
 }
